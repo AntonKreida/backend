@@ -6,6 +6,12 @@ const server = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://127.0.0.1');
     filePath = path.join(__dirname, './date', 'users.json');
 
+    if(url.pathname === '/') {
+        res.statusCode = 200;
+        res.end('Hello World');
+        return;
+    }
+
     if (url.searchParams.has('hello') && !url.searchParams.get('hello')) {
         res.statusCode = 400;
         res.end('Enter a name');
