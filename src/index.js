@@ -1,30 +1,32 @@
 const http = require('http');
 const fs = require('fs');
+const url = require('url');
 const path = require('path');
 
 const server = http.createServer((req, res) => {
-    const url = new URL(req.url, 'http://127.0.0.1');
+    const urlBase = new URL(req.url, 'http://127.0.0.1');
+    const urlParts = url.parse(req.url, true);
     filePath = path.join(__dirname, './date', 'users.json');
 
-    if(url.pathname === '/') {
+    if(urlBase.pathname === '/' && Object.keys(urlParts.query).length === 0) {
         res.statusCode = 200;
         res.end('Hello World');
         return;
     }
 
-    if (url.searchParams.has('hello') && !url.searchParams.get('hello')) {
+    if (urlBase.searchParams.has('hello') && !urlBase.searchParams.get('hello')) {
         res.statusCode = 400;
         res.end('Enter a name');
         return;
     }
 
-    if (url.searchParams.has('hello') && url.searchParams.get('hello')) {
+    if (urlBase.searchParams.has('hello') && urlBase.searchParams.get('hello')) {
         res.statusCode = 200;
-        res.end(`Hello, ${url.searchParams.get('hello')}`);
+        res.end(`Hello, ${urlBase.searchParams?.get('hello')}`);
         return;
     }
 
-    if(url.searchParams.has('users') && !url.searchParams.get('users')) {
+    if(urlBase.searchParams.has('users') && !urlBase.searchParams.get('users')) {
         req.headers['Content-Type'] = 'application/json';
         fs.readFile(filePath, (error, data) => {
             if(!error) {
@@ -38,7 +40,7 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    if(!url.searchParams.has('users') || !url.searchParams.get('hello')) {
+    if(!urlBase.searchParams.has('users') || !urlBase.searchParams.get('hello')) {
         res.statusCode = 500;
         res.end('Server Error');
     }
