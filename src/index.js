@@ -3,13 +3,22 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-mongoose.connect('mongodb://127.0.0.1:27017/backend')
+dotenv.config()
+
+const {
+    PORT = 3000,
+    API_URL = 'http://127.0.0.1',
+    DATABASE_URL,
+} = process.env
+
+mongoose.connect(`${DATABASE_URL}`)
 .then(() => console.log('Connected to MongoDB'))
 .catch(error => console.log(error));
 
 const server = http.createServer((req, res) => {
-    const urlBase = new URL(req.url, 'http://127.0.0.1');
+    const urlBase = new URL(req.url, `${API_URL}`);
     const urlParts = url.parse(req.url, true);
     filePath = path.join(__dirname, './date', 'users.json');
 
@@ -51,6 +60,6 @@ const server = http.createServer((req, res) => {
     }
 })
 
-server.listen(3003, () => {
-    console.log('Server running on port 3003')
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} in on url ${API_URL}`);
 })
