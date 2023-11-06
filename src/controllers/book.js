@@ -9,9 +9,38 @@ const getAllBooks = async (_req, res) => {
     }
 }
 
+const getBookById = async (req, res) => {
+    try {
+        const book = await bookSchema.findById(req.params.id)
+        res.status(200).send(book)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+const putUpdateBook = async (req, res) => {
+    try {
+        const book = await bookSchema.findByIdAndUpdate(req.params.id, {...req.body}, {new: true})
+        res.status(200).send(book)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 const postCreateBook = async (req, res) => {
     try {
         const book = await bookSchema.create({...req.body})
+        await book.save();
+        res.status(200).send(book)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+const deleteBook = async (req, res) => {
+    try {
+        const book = await bookSchema.findByIdAndDelete(req.params.id)
+        await book.save();
         res.status(200).send(book)
     } catch (error) {
         res.status(500).send(error)
@@ -20,5 +49,8 @@ const postCreateBook = async (req, res) => {
 
 module.exports = {
     getAllBooks,
+    getBookById,
     postCreateBook,
+    putUpdateBook,
+    deleteBook,
 }
