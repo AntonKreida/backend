@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRouter = require('./routers/user');
+const bookRouter = require('./routers/book');
 
 const app = express();
 dotenv.config()
@@ -19,6 +20,7 @@ mongoose.connect(`${DATABASE_URL}/backend`)
 app.use(express.json());
 
 app.use(userRouter);
+app.use(bookRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${API_URL}:${PORT}`)
