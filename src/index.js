@@ -1,10 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-
-dotenv.config()
+const userRouter = require('./routers/user');
 
 const app = express();
+dotenv.config()
 
 const {
     PORT = 3000,
@@ -12,9 +12,13 @@ const {
     DATABASE_URL,
 } = process.env
 
-mongoose.connect("mongodb://127.0.0.1:27017/backend")
+mongoose.connect(`${DATABASE_URL}/backend`)
 .then(() => console.log('Connected to MongoDB'))
 .catch(error => console.log(error));
+
+app.use(express.json());
+
+app.use(userRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${API_URL}:${PORT}`)
