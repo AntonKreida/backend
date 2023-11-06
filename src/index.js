@@ -2,6 +2,11 @@ const http = require('http');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1:27017/backend')
+.then(() => console.log('Connected to MongoDB'))
+.catch(error => console.log(error));
 
 const server = http.createServer((req, res) => {
     const urlBase = new URL(req.url, 'http://127.0.0.1');

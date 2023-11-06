@@ -1,0 +1,30 @@
+version: '3.0'
+services:
+  app:
+    container_name: app
+    depends_on:
+      - mongodb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    working_dir: /src
+    networks: 
+      - mongo-compose-network  
+    volumes:
+      - .:/src  
+  mongodb:
+    container_name: mongodb
+    image: mongo:4.2
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_DATABASE=auth
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - '27017:27017'
+    volumes: 
+      - ./data:/data/db    
+networks:
+  mongo-compose-network:
+    driver: bridge
