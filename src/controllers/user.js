@@ -41,6 +41,18 @@ const postAddBookForUser = async (req, res) => {
     }
 }
 
+const postRemoveBookForUser = async (req, res) => {
+    try {
+        const user = await userSchema.findByIdAndUpdate(
+            req.params.id, {$pull: {books: req.body.bookId}}, 
+            { returnDocument: 'after' }, {new: true})
+        .populate('books').exec()
+        res.status(200).send(user)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 const putUpdateUser = async (req, res) => {
     try {
         const user = await userSchema.findByIdAndUpdate(req.params.id, {...req.body}, {new: true})
@@ -65,5 +77,6 @@ module.exports = {
     postCreateUser,
     putUpdateUser,
     postAddBookForUser,
+    postRemoveBookForUser,
     deleteUser,
 }

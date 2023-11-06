@@ -4,6 +4,7 @@ const {
     getUserById, 
     postCreateUser,
     postAddBookForUser, 
+    postRemoveBookForUser,
     putUpdateUser, 
     deleteUser
 } = require('../controllers/user')
@@ -12,6 +13,7 @@ router.get('/users', getAllUsers)
 router.get('/users/:id', getUserById)
 router.post('/users', postCreateUser)
 router.post('/users/:id/add', postAddBookForUser)
+router.post('/users/:id/remove', postRemoveBookForUser)
 router.put('/users/:id', putUpdateUser)
 router.delete('/users/:id', deleteUser)
 
